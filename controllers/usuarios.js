@@ -5,16 +5,16 @@ const Usuario = require('../models/usuario');
 
 
 
-const usuariosGet = (req = request, res = response) => {
+const usuariosGet = async(req = request, res = response) => {
 
-    const { q, nombre, apikey } = req.query;
+    /* limite que viene de la url get ?limite=algo */
+    const {limite = 5, desde = 0} = req.query;
+    const usuarios = await Usuario.find()
+    .skip(Number(desde))
+        .limit(Number(limite))
 
     res.json({
-        ok: true,
-        msg: 'get API - controlador',
-        q,
-        nombre,
-        apikey
+        usuarios
     });
 };
 
@@ -54,11 +54,7 @@ const usuariosPut = async (req, res) => {
     const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
 
-    res.json({
-        ok: true,
-        msg: 'put API - controlador',
-        usuario
-    });
+    res.json(usuario);
 };
 
 const usuariosPatch = (req, res) => {
