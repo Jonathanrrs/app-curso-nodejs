@@ -80,18 +80,9 @@ const usuariosPatch = (req, res) => {
 const usuariosDelete = async (req, res) => {
 
     const {id} = req.params;
-    
-    /* No es del todo correcto esto */
-    // const uid = req.uid
-
-    /* Fisicamente lo borramos */
-    // const usuario = await Usuario.findByIdAndDelete(id);
-    
-    
     const usuario = await Usuario.findByIdAndUpdate(id, {estado: false})
-    const usuarioAutenticado = req.usuario;
-
-    res.json({usuario, usuarioAutenticado});
+    
+    res.json({usuario});
 };
 
 module.exports = {
