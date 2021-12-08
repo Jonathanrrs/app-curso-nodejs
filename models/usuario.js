@@ -38,7 +38,8 @@ const UsuarioSchema = Schema({
 /* Debe ser función normal */
 /* esto para quitar los campos de password y __v de mongo */
 UsuarioSchema.methods.toJSON = function () {
-    const {__v, password, ...usuario} = this.toObject();
+    const {__v, password, _id,...usuario} = this.toObject();
+    usuario.uid = _id;
     return usuario;
 }
 
