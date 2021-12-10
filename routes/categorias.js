@@ -3,39 +3,44 @@ const { check } = require('express-validator');
 
 const { validarJWT, validarCampos } = require('../middlewares');
 
-const { crearCategoria } = require('../controllers/categorias');
+const { crearCategoria, obtenerCategorias, obtenerCategoria, actualizarCategoria, borrarCategoria } = require('../controllers/categorias');
+const { existeCategoriaPorId } = require('../helpers/db-validators');
 
 
 const router = Router();
 
 
 /* Obtener todas las categorias - publico */
-router.get('/', (req,res) => {
-    res.json('get');
-});
+router.get('/', obtenerCategorias);
 
 
 /* Obtener una categoria por id - publico */
-router.get('/:id', (req,res) => {
-    res.json('get-id');
-});
+router.get('/:id', [
+    check('id').custom(existeCategoriaPorId).withMessage('El id no existe'),
+    validarCampos
+], obtenerCategoria);
 
 /* Crear categoria- privado(cualquier persona con un token valido) */
 router.post('/', [
     validarJWT,
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     validarCampos
-],crearCategoria);
+], crearCategoria);
 
 /* Actualizar - privado(cualquiera con token válido) */
-router.put('/:id', (req,res) => {
-    res.json('put');
-});
+router.put('/:id', [
+    validarJWT,
+    check('id').custom(existeCategoriaPorId).withMessage('El id no existe'),
+    validarCampos
+
+], actualizarCategoria);
 
 /* Borrar una categoria - admin */
-router.delete('/:id', (req,res) => {
-    res.json('delete');
-});
+router.delete('/:id', [
+    validarJWT,
+    check('id').custom(existeCategoriaPorId).withMessage('El id no existe'),
+    validarCampos
+], borrarCategoria);
 
 
 
