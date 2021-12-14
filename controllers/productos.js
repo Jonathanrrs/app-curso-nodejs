@@ -37,15 +37,16 @@ const obtenerProducto = async(req = request, res = response) => {
 /* Crear producto */
 const crearProducto = async(req= request, res = response) => {
    
-    const {nombre, estado, precio, categoria, descripcion, disponible} = req.body;
+    // const {nombre, estado, precio, categoria, descripcion, disponible} = req.body;
+    const {estado, usuario, ...body} = req.body;
    
-    const productoDB = await Producto.findOne({nombre: nombre.toUpperCase()});
+    const productoDB = await Producto.findOne({nombre: body.nombre.toUpperCase()});
     if(productoDB) {
         return res.status(400).json({
             msg: `El producto ${productoDB.nombre} ya existe`
         });
     }
-    const categoriaDB = await Categoria.findById(categoria);
+    const categoriaDB = await Categoria.findById(body.categoria);
     if(!categoriaDB) {
         return res.status(400).json({
             msg: `La categoria no existe`
@@ -53,13 +54,10 @@ const crearProducto = async(req= request, res = response) => {
     }
 
     const data = {
-        nombre: nombre.toUpperCase(),
-        estado,
-        usuario: req.usuario._id,
-        precio,
-        categoria,
-        descripcion: descripcion.toUpperCase(),
-        disponible
+        nombre: body.nombre.toUpperCase(),
+        usuario: req.usuario._id,  
+        descripcion: body.descripcion.toUpperCase(),
+        ...body
     }
 
     const producto = new Producto(data);
@@ -74,15 +72,16 @@ const crearProducto = async(req= request, res = response) => {
 
 const actualizarProducto = async(req = request, res = response) => {
     const {id} = req.params;
-    const {nombre, estado, precio, categoria, descripcion, disponible} = req.body;
+    // const {nombre, estado, precio, categoria, descripcion, disponible} = req.body;
+    const {estado, usuario, ...body} = req.body;
 
-    const productoDB = await Producto.findOne({nombre: nombre.toUpperCase()});
+    const productoDB = await Producto.findOne({nombre: body.nombre.toUpperCase()});
     if(productoDB) {
         return res.status(400).json({
             msg: `El producto ${productoDB.nombre} ya existe`
         });
     }
-    const categoriaDB = await Categoria.findById(categoria);
+    const categoriaDB = await Categoria.findById(body.categoria);
     if(!categoriaDB) {
         return res.status(400).json({
             msg: `La categoria no existe`
@@ -90,13 +89,10 @@ const actualizarProducto = async(req = request, res = response) => {
     }
 
     const data = {
-        nombre: nombre.toUpperCase(),
-        estado,
-        usuario: req.usuario._id,
-        precio,
-        categoria,
-        descripcion: descripcion.toUpperCase(),
-        disponible
+        nombre: body.nombre.toUpperCase(),
+        usuario: req.usuario._id,  
+        descripcion: body.descripcion.toUpperCase(),
+        ...body
     }
 
     const producto = await Producto.findByIdAndUpdate(id, data, {new: true});
