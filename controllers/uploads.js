@@ -5,11 +5,6 @@ const { Usuario, Producto } = require('../models');
 
 const cargarArchivo = async (req, res = response) => {
 
-
-  if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
-    return res.status(400).json({ msg: 'No hay archivos que subir' });
-  }
-
   // /* Imágenes */
   // const nombre = await subirArchivo(req.files);
 
@@ -21,11 +16,12 @@ const cargarArchivo = async (req, res = response) => {
     res.status(400).json({ msg })
   }
 
-  res.json({ nombre })
+  // res.json({ nombre })
 
 }
 
 const actualizarImagen = async (req, res = response) => {
+
   const { id, coleccion } = req.params;
 
   let modelo;

@@ -4,13 +4,15 @@ const { cargarArchivo, actualizarImagen } = require('../controllers/uploads');
 const { coleccionesPermitidas } = require('../helpers');
 
 
-const { validarCampos } = require('../middlewares');
+const { validarCampos, validarArchivoSubir } = require('../middlewares');
 
 const router = Router();
 
-router.post('/', cargarArchivo);
+/* como es solo un middleware lo pasamos como 2 argumento así */
+router.post('/', validarArchivoSubir, cargarArchivo);
 
 router.put('/:coleccion/:id', [
+    validarArchivoSubir,
     check('id', 'El id debe ser de mongo').isMongoId(),
     check('coleccion').custom(c => coleccionesPermitidas(c, ['usuarios', 'productos'])),
     validarCampos
