@@ -48,16 +48,17 @@ const conectarSocket = async() => {
         console.log('sockets online');
     });
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', (payload) => {
         console.log('sockets offline');
+        // console.log(payload);
     });
 
     socket.on('recibir-mensajes', () => {
         
     });
 
-    socket.on('usuarios-activos', () => {
-        
+    socket.on('usuarios-activos', (payload) => {
+        console.log(payload);
     });
 
     socket.on('mensaje-privado', () => {
