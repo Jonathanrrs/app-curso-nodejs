@@ -53,8 +53,8 @@ const conectarSocket = async() => {
         // console.log(payload);
     });
 
-    socket.on('recibir-mensajes', () => {
-        
+    socket.on('recibir-mensajes', (payload) => {
+        console.log(payload);
     });
 
     // socket.on('usuarios-activos', (payload) => {
@@ -86,6 +86,20 @@ const dibujarUsuarios = ((usuarios = []) => {
     });
 
     ulUsuarios.innerHTML = usersHtml;
+});
+
+
+txtMensaje.addEventListener('keyup', ({keyCode}) => {
+    
+    const mensaje = txtMensaje.value;
+    const uid = txtUid.value;
+    if(keyCode !== 13){return;}
+    if(mensaje.length === 0){return;}
+
+
+    /* se recomienda mandar en objeto */
+    socket.emit('enviar-mensaje', {mensaje, uid})
+
 })
 
 const main = async() => {
